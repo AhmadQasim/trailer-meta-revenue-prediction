@@ -5,3 +5,13 @@ pandas
 matplotlib
 scrapy
 fire
+torch
+requests
+youtube_dl
+cv2
+tensorflow
+numpy
+scikit-learn
+pandas
+matplotlib
+pickle
