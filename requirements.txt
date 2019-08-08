@@ -8,10 +8,9 @@ fire
 torch
 requests
 youtube_dl
-cv2
+opencv-python
 tensorflow
 numpy
 scikit-learn
 pandas
 matplotlib
-pickle
