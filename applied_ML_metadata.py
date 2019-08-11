@@ -138,13 +138,15 @@ def test_model(model, X_test, y_test, is_pca=False):
         pca = PCA(n_components=8)
         X_test = pca.fit_transform(X_test)
     # make predictions using the test set
-    y_pred = model.predict(X_test)
-
+    y_pred = model.evaluate(X_test, y_test)
+    '''
     # mean squared error
     print("Mean abs error: %.2f"
           % mean_absolute_error(y_test, y_pred))
     # explained variance score: 1 is perfect prediction
     print('Variance score: %.2f' % r2_score(y_test, y_pred))
+    '''
+    print(y_pred)
     return y_pred
 
 
@@ -171,7 +173,8 @@ def main(method='lr', save=False, vis=False):
     '''
 
     # pre-processing data
-    X = join_to_features()
+    X = pd.read_csv('tmdb_data/meta_features.csv')
+    X = X.drop(columns=['imdb_id'])
     y = X['revenue']
     X.drop(columns='revenue', inplace=True)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=50)
@@ -190,7 +193,7 @@ def main(method='lr', save=False, vis=False):
     if method == 'svr':
         model = support_vector_regression(X_train, y_train)
     if method == 'nn':
-        model = neural_net(X_train, x_val, y_train, y_val, 2)
+        model = neural_net(X_train, x_val, y_train, y_val, 100)
         is_nn = True
 
     predictions = test_model(model, X_test, y_test, is_pca=is_pca)

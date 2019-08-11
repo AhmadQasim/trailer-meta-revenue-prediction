@@ -19,13 +19,13 @@ def neural_net(X_train, x_val, y_train, y_val, epochs=50):
     dims = X_train.shape[1]
     model = keras.Sequential()
     model.add(keras.layers.Dense(10, input_dim=dims, activation='relu'))
-    model.add(keras.layers.Dense(20, activation='relu'))
+    model.add(keras.layers.Dense(30, activation='relu'))
     model.add(keras.layers.Dense(10, activation='relu'))
     model.add(keras.layers.Dense(1, activation="linear"))
 
     opt = keras.optimizers.Adam(lr=1e-3, decay=1e-3 / 200)
     model.compile(optimizer=opt,
-                  loss='mse',
+                  loss='mae',
                   metrics=['mae'])
 
     model.summary()
