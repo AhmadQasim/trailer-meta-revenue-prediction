@@ -60,8 +60,8 @@ class DataGenerator(keras.utils.Sequence):
         """Generates data containing batch_size samples"""
         # Initialization
         X = np.zeros((self.batch_size, self.frames, self.featureLength))
-        y = np.zeros((self.batch_size, self.n_classes), dtype=int)
-        # y = np.zeros(self.batch_size, dtype=int)
+        # y = np.zeros((self.batch_size, self.n_classes), dtype=int)
+        y = np.zeros(self.batch_size, dtype=int)
 
         # Generate data
         for i, video_id in enumerate(list_IDs_temp):
@@ -73,9 +73,9 @@ class DataGenerator(keras.utils.Sequence):
             # Store budget
             with open(self.dataset_root+video_id+'/y', "rb") as f:
                 val = pickle.load(f)
-                val = 5 * round(math.floor(math.log10(val) * 10) / 5)
-                y[i, int(val/5)] = 1
+                # val = 5 * round(math.floor(math.log10(val) * 10) / 5)
+                # y[i, int(val/5)] = 1
                 # val = math.floor(math.log10(val) * 100)
-                # y[i] = val
+                y[i] = val
         # X = np.expand_dims(X, axis=1)
         return X, y
