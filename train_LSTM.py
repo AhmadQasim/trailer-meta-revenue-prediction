@@ -17,11 +17,13 @@ DIM = (360, 480)
 CHANNELS = 3
 NUM_CLASSES = 20
 
-lstm = TrailerLSTM(FRAMES, NUM_CLASSES)
+META_DIMS = (1, 22)
+
+lstm = TrailerLSTM(FRAMES, NUM_CLASSES, META_DIMS)
 model = lstm.create_model()
 
 mcp_save = keras.callbacks.ModelCheckpoint('./models/model_lstm_lr_categorical.h5', save_best_only=True,
-                                           monitor='val_mae', mode='min')
+                                           monitor='val_mean_absolute_error', mode='min')
 
 video_ids = np.array(os.listdir(DATASET_ROOT))
 test_indices = list(ShuffleSplit(n_splits=1, test_size=TEST_RATIO, random_state=1).split(video_ids))

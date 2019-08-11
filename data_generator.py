@@ -2,7 +2,7 @@ import numpy as np
 from tensorflow import keras
 import pickle
 from feature_extractor.feature_extractor import YouTube8MFeatureExtractor
-import math
+import pandas as pd
 
 
 class DataGenerator(keras.utils.Sequence):
@@ -63,12 +63,19 @@ class DataGenerator(keras.utils.Sequence):
         # y = np.zeros((self.batch_size, self.n_classes), dtype=int)
         y = np.zeros(self.batch_size, dtype=int)
 
+        X2 = np.zeros((self.batch_size, 1, 22))
+
         # Generate data
         for i, video_id in enumerate(list_IDs_temp):
             # list the frames saved within the corresponding directory
             with open(self.dataset_root + video_id + '/X', "rb") as f:
                 X_vid = pickle.load(f)
                 X[i, :, :] = X_vid[:self.frames, :]
+
+            with open(self.dataset_root + video_id + '/X2', "rb") as f:
+                X2_vid = pickle.load(f)
+                X2_vid = X2_vid.to_numpy()
+                X2[i, 0, :] = X2_vid
 
             # Store budget
             with open(self.dataset_root+video_id+'/y', "rb") as f:
@@ -78,4 +85,4 @@ class DataGenerator(keras.utils.Sequence):
                 # val = math.floor(math.log10(val) * 100)
                 y[i] = val
         # X = np.expand_dims(X, axis=1)
-        return X, y
+        return [X, X2], y
