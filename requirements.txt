@@ -9,8 +9,3 @@ torch
 requests
 youtube_dl
 opencv-python
-tensorflow
-numpy
-scikit-learn
-pandas
-matplotlib
