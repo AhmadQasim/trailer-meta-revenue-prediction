@@ -10,14 +10,14 @@ DATASET_ROOT = './feature_extractor/youtube_data/'
 BATCH_SIZE = 15
 FRAMES = 32
 EPOCHS_PER_FOLD = 10
-TEST_RATIO = 0.1
+TEST_RATIO = 0.01
 # total epochs = FOLDS * EPOCHS_PER_FOLDS
 FOLDS = 10
 DIM = (360, 480)
 CHANNELS = 3
 NUM_CLASSES = 20
 
-META_DIMS = (1, 22)
+META_DIMS = (1, 21)
 
 lstm = TrailerLSTM(FRAMES, NUM_CLASSES, META_DIMS)
 model = lstm.create_model()
@@ -42,9 +42,9 @@ for i, indices in enumerate(folds):
 
     # testing the data generator
     train_dg = DataGenerator(video_ids_train, BATCH_SIZE, frames=FRAMES, dim=DIM, n_channels=CHANNELS,
-                             n_classes=NUM_CLASSES)
+                             n_classes=NUM_CLASSES, meta_dim=META_DIMS)
     valid_dg = DataGenerator(video_ids_val, BATCH_SIZE, frames=FRAMES, dim=DIM, n_channels=CHANNELS,
-                             n_classes=NUM_CLASSES)
+                             n_classes=NUM_CLASSES, meta_dim=META_DIMS)
 
     history = model.fit_generator(generator=train_dg,
                                   validation_data=valid_dg,
@@ -53,7 +53,7 @@ for i, indices in enumerate(folds):
 
 
 test_dg = DataGenerator(video_ids_test, BATCH_SIZE, frames=FRAMES, dim=DIM, n_channels=CHANNELS, n_classes=NUM_CLASSES,
-                        dataset_root=DATASET_ROOT)
+                        dataset_root=DATASET_ROOT, meta_dim=META_DIMS)
 
 result = model.evaluate_generator(test_dg)
 print(result)

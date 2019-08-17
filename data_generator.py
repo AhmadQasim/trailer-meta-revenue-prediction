@@ -18,7 +18,7 @@ class DataGenerator(keras.utils.Sequence):
     '''
     def __init__(self, list_IDs, batch_size=4, dim=(480, 360), n_channels=3,
                  shuffle=True, dataset_root='./feature_extractor/youtube_data/', frames=64,
-                 n_classes=9):
+                 n_classes=9, meta_dim=(1, 22)):
         """Initialization"""
         self.dim = dim
         self.batch_size = batch_size
@@ -31,6 +31,7 @@ class DataGenerator(keras.utils.Sequence):
         self.extractor = YouTube8MFeatureExtractor()
         self.featureLength = 1024
         self.n_classes = n_classes
+        self.meta_dim = meta_dim
 
     def __len__(self):
         """Denotes the number of batches per epoch"""
@@ -63,7 +64,7 @@ class DataGenerator(keras.utils.Sequence):
         # y = np.zeros((self.batch_size, self.n_classes), dtype=int)
         y = np.zeros(self.batch_size, dtype=int)
 
-        X2 = np.zeros((self.batch_size, 1, 22))
+        X2 = np.zeros((self.batch_size, self.meta_dim[0], self.meta_dim[1]))
 
         # Generate data
         for i, video_id in enumerate(list_IDs_temp):
@@ -74,6 +75,7 @@ class DataGenerator(keras.utils.Sequence):
 
             with open(self.dataset_root + video_id + '/X2', "rb") as f:
                 X2_vid = pickle.load(f)
+                X2_vid = X2_vid.drop(columns=['revenue'])
                 X2_vid = X2_vid.to_numpy()
                 X2[i, 0, :] = X2_vid
 
